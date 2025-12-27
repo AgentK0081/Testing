@@ -223,15 +223,25 @@
   </section>
 
   <!-- ================== AGENTS TAB ================== -->
-  <section id="agents" style="display:none;">
-    <div class="controls">
-      <input type="text" id="search" placeholder="Search username or callsign...">
-      <select id="rankFilter">
-        <option value="">All Ranks</option>
-      </select>
+  <!-- ================= AGENTS TAB ================= -->
+<section id="agents" style="display:none;">
+
+  <div class="agents-panel">
+    <div class="agents-header">
+      <span>Agents (<span id="agentCount"></span>)</span>
+      <input
+        type="text"
+        id="agentSearch"
+        placeholder="Search Agents"
+        oninput="renderAgents()"
+      />
     </div>
-    <div class="agent-grid" id="agentGrid"></div>
-  </section>
+
+    <div id="agentList"></div>
+  </div>
+
+</section>
+
 </main>
 
 <footer>FBI TEAM ROBLOX – RP Directory</footer>
