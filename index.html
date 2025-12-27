@@ -251,35 +251,47 @@
 <script src="divisions.js"></script>
 
 <script>
-  const agentGrid = document.getElementById("agentGrid");
-  const rankFilter = document.getElementById("rankFilter");
-  const searchInput = document.getElementById("search");
+  const agentList = document.getElementById("agentList");
+const agentCount = document.getElementById("agentCount");
 
-  function renderAgents() {
-    agentGrid.innerHTML = "";
-    const search = searchInput.value.toLowerCase();
-    const rank = rankFilter.value;
+function renderAgents() {
+  const search = document.getElementById("agentSearch").value.toLowerCase();
+  agentList.innerHTML = "";
 
-    agents
-      .filter(a =>
-        (!rank || a.rank === rank) &&
-        (a.username.toLowerCase().includes(search) || a.callsign.toLowerCase().includes(search))
-      )
-      .forEach(a => {
-        const card = document.createElement("div");
-        card.className = "agent-card";
-        card.innerHTML = `
-          <div class="agent-header" onclick="this.parentElement.classList.toggle('open')">
-            <strong>${a.callsign}</strong>
-            <span>${a.username}</span>
-          </div>
-          <div class="agent-details">
-            <div>Rank: ${a.rank}</div>
-          </div>
-        `;
-        agentGrid.appendChild(card);
-      });
-  }
+  const filtered = agents.filter(a =>
+    a.username.toLowerCase().includes(search) ||
+    a.callsign.toLowerCase().includes(search)
+  );
+
+  agentCount.textContent = filtered.length;
+
+  filtered.forEach(agent => {
+    const row = document.createElement("div");
+    row.className = "agent-row";
+
+    row.innerHTML = `
+      <img class="agent-avatar"
+        src="https://www.roblox.com/headshot-thumbnail/image?userId=1&width=48&height=48&format=png">
+      <div class="agent-info">
+        <div class="agent-name">${agent.username}</div>
+        <div class="agent-callsign">${agent.callsign}</div>
+      </div>
+      <div class="agent-status">
+        ${agent.suspended ? "Suspended" : agent.rank}
+      </div>
+    `;
+
+    row.onclick = () => {
+      document.querySelectorAll(".agent-row").forEach(r => r.classList.remove("active"));
+      row.classList.add("active");
+    };
+
+    agentList.appendChild(row);
+  });
+}
+
+renderAgents();
+
 
   function setupRanks() {
     [...new Set(agents.map(a => a.rank))].forEach(r => {
