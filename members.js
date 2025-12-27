@@ -1,6 +1,6 @@
 const agents = [
-  { callsign: "FED001", username: "HIM12345t", rank: "Director" },
-  { callsign: "FED002", username: "ItsWillian", rank: "Deputy Director" },
-  { callsign: "FED003", username: "AgentNova", rank: "Senior Agent" },
-  { callsign: "FED004", username: "ShadowFBI", rank: "Field Agent" }
+  { callsign: "FED001", username: "AgentK_0081", rank: "Director", suspended: false },
+  { callsign: "FED014", username: "MinPRPO08", rank: "Senior Agent", suspended: false },
+  { callsign: "FED022", username: "crnac", rank: "Field Agent", suspended: true }
 ];
+
