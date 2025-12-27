@@ -1,98 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FBI TEAM ROBLOX – RP Player System</title>
+  <meta charset="UTF-8" />
+  <title>FBI TEAM ROBLOX – RP Directory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-:root {
-  --bg:#0b0b0b;--panel:#141414;--gold:#c9a23f;--gold-soft:rgba(201,162,63,.25);
-  --text:#fff;--muted:#aaa;--red:#ff0000;
-}
-body{margin:0;background:radial-gradient(circle at top,#111,#000);color:var(--text);font-family:Segoe UI,Roboto,sans-serif}
-.topbar{display:flex;justify-content:center;gap:40px;padding:18px;background:linear-gradient(#111,#070707);border-bottom:1px solid #222}
-.topbar span{color:var(--muted)}
-.topbar .active{color:var(--gold);border-bottom:3px solid var(--gold);padding-bottom:6px}
-.search-bar{max-width:1100px;margin:20px auto;padding:0 15px}
-.search-bar input{width:100%;padding:14px;background:#1a1a1a;border:none;border-radius:12px;color:#fff}
-.container{max-width:1200px;margin:0 auto 60px;display:grid;grid-template-columns:1fr 360px;gap:20px;padding:0 15px}
-.player-list{background:var(--panel);border-radius:16px;overflow:hidden}
-.player{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #222;cursor:pointer;transition:.3s}
-.player:hover{background:var(--gold-soft)}
-.player.selected{background:linear-gradient(90deg,rgba(201,162,63,.35),transparent)}
-.player-left{display:flex;align-items:center;gap:14px}
-.avatar{width:46px;height:46px;border-radius:10px;background:#222}
-.player-name{font-size:18px}
-.player-handle{font-size:13px;color:var(--muted)}
-.badge{font-size:12px;padding:3px 8px;border-radius:8px;margin-top:4px;display:inline-block}
-.Director{background:rgba(255,0,0,.25);color:#ff6b6b}
-.Deputy{background:rgba(255,140,0,.25);color:#ffb347}
-.Agent{background:rgba(0,150,255,.25);color:#6bbcff}
-.team{font-size:14px;color:var(--muted)}
-.side{background:var(--panel);border-radius:16px;padding:18px}
-.side h3{margin-top:0;color:var(--gold)}
-.stat{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #222;font-size:14px}
-.profile{margin-top:15px;font-size:14px;line-height:1.6}
-.classified{filter:blur(5px)}
-.unlock{margin-top:10px;padding:8px 12px;background:var(--red);border:none;border-radius:8px;color:#fff;cursor:pointer}
-@media(max-width:900px){.container{grid-template-columns:1fr}}
-</style>
+  <!-- ================== THEME (EASY TO REMOVE) ================== -->
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --card: #11141a;
+      --gold: #c9a44a;
+      --red: #ff2b2b;
+      --text: #eaeaea;
+      --muted: #9aa0aa;
+    }
+
+    body.light {
+      --bg: #f2f2f2;
+      --card: #ffffff;
+      --text: #111;
+      --muted: #555;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: radial-gradient(circle at top, #111 0%, var(--bg) 60%);
+      color: var(--text);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px;
+      background: linear-gradient(90deg, #000, #0f1116);
+      border-bottom: 1px solid #222;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 15px;
+      cursor: pointer;
+      padding-bottom: 6px;
+    }
+
+    nav button.active {
+      border-bottom: 3px solid var(--gold);
+      color: var(--gold);
+    }
+
+    .theme-toggle {
+      border: 1px solid #333;
+      background: var(--card);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 24px;
+    }
+
+    /* ================== DIVISIONS ================== */
+    .division-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .division-card {
+      position: relative;
+      background: linear-gradient(180deg, #1a1d25, var(--card));
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid #222;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .division-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px rgba(255, 43, 43, 0.55);
+    }
+
+    .division-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      filter: brightness(0.85);
+    }
+
+    .division-info {
+      padding: 14px;
+    }
+
+    .division-info h3 {
+      margin: 0 0 6px;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+
+    .join-btn {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .join-btn a {
+      background: var(--red);
+      padding: 12px 22px;
+      border-radius: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(255,43,43,0.7);
+    }
+
+    .division-card:hover .join-btn {
+      display: flex;
+    }
+
+    /* ================== AGENTS ================== */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .controls input, .controls select {
+      background: var(--card);
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .agent-card {
+      background: linear-gradient(180deg, #151922, var(--card));
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #222;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .agent-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 18px rgba(255, 43, 43, 0.6);
+    }
+
+    .agent-header {
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .agent-header strong {
+      color: var(--gold);
+    }
+
+    .agent-details {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .agent-card.open .agent-details {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
 
-<div class="topbar">
-  <span>Teams</span><span class="active">Players</span><span>Shop</span><span>Servers</span>
-</div>
+<header>
+  <h1>FBI TEAM ROBLOX</h1>
+  <nav>
+    <button class="active" data-tab="divisions">Division</button>
+    <button data-tab="agents">Agents</button>
+  </nav>
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+</header>
 
-<div class="search-bar"><input id="search" placeholder="Search players / FED ID"></div>
+<main>
+  <!-- ================== DIVISIONS TAB ================== -->
+  <section id="divisions">
+    <div class="division-grid" id="divisionGrid"></div>
+  </section>
 
-<div class="container">
-  <div class="player-list" id="playerList"></div>
-
-  <div class="side" id="sidePanel">
-    <h3>Player Profile</h3>
-    <div class="stat"><span>FED ID</span><span id="sid">—</span></div>
-    <div class="stat"><span>Rank</span><span id="srank">—</span></div>
-    <div class="stat"><span>Wanted Level</span><span id="swanted">0 ★</span></div>
-    <div class="stat"><span>Job Points</span><span id="sjp">—</span></div>
-    <div class="profile classified" id="classified">
-      <strong>Notes:</strong><br><span id="snotes">Classified</span>
+  <!-- ================== AGENTS TAB ================== -->
+  <section id="agents" style="display:none;">
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search username or callsign...">
+      <select id="rankFilter">
+        <option value="">All Ranks</option>
+      </select>
     </div>
-    <button class="unlock" onclick="unlock()">UNLOCK CLASSIFIED</button>
-  </div>
-</div>
+    <div class="agent-grid" id="agentGrid"></div>
+  </section>
+</main>
+
+<footer>FBI TEAM ROBLOX – RP Directory</footer>
+
+<!-- ================== DATA FILES ================== -->
+<script src="members.js"></script>
+<script src="divisions.js"></script>
 
 <script>
-let unlocked=false;
-const players=[
-{fed:"FED001",name:"HIM12345t",handle:"@HIM12345t",rank:"Director",team:"FBI",wanted:0,jp:999,notes:"Head of Operations"},
-{fed:"FED014",name:"AgentK_0081",handle:"@AgentK_0081",rank:"Deputy",team:"Civilian",wanted:1,jp:230,notes:"Under Observation"},
-{fed:"FED087",name:"crnac",handle:"@sasa_1236809",rank:"Agent",team:"RCPD",wanted:0,jp:120,notes:"Joint Task Force"}
-];
-const list=document.getElementById('playerList');
-function render(filter=""){
-list.innerHTML="";
-players.filter(p=>p.name.toLowerCase().includes(filter)||p.fed.toLowerCase().includes(filter))
-.forEach(p=>{
-const d=document.createElement('div');d.className='player';
-d.innerHTML=`<div class='player-left'>
-<img class='avatar' src='https://www.roblox.com/headshot-thumbnail/image?userId=1&width=150&height=150&format=png'>
-<div><div class='player-name'>${p.name}</div><div class='player-handle'>${p.handle}</div>
-<span class='badge ${p.rank}'>${p.rank}</span></div></div>
-<div class='team'>${p.team}</div>`;
-d.onclick=()=>select(p,d);
-list.appendChild(d);
-});}
-function select(p,el){document.querySelectorAll('.player').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');
-document.getElementById('sid').textContent=p.fed;
-document.getElementById('srank').textContent=p.rank;
-document.getElementById('swanted').textContent=p.wanted+' ★';
-document.getElementById('sjp').textContent=p.jp;
-document.getElementById('snotes').textContent=p.notes;}
-function unlock(){unlocked=!unlocked;document.getElementById('classified').classList.toggle('classified',!unlocked)}
-document.getElementById('search').addEventListener('input',e=>render(e.target.value.toLowerCase()));
-render();
+  const agentGrid = document.getElementById("agentGrid");
+  const rankFilter = document.getElementById("rankFilter");
+  const searchInput = document.getElementById("search");
+
+  function renderAgents() {
+    agentGrid.innerHTML = "";
+    const search = searchInput.value.toLowerCase();
+    const rank = rankFilter.value;
+
+    agents
+      .filter(a =>
+        (!rank || a.rank === rank) &&
+        (a.username.toLowerCase().includes(search) || a.callsign.toLowerCase().includes(search))
+      )
+      .forEach(a => {
+        const card = document.createElement("div");
+        card.className = "agent-card";
+        card.innerHTML = `
+          <div class="agent-header" onclick="this.parentElement.classList.toggle('open')">
+            <strong>${a.callsign}</strong>
+            <span>${a.username}</span>
+          </div>
+          <div class="agent-details">
+            <div>Rank: ${a.rank}</div>
+          </div>
+        `;
+        agentGrid.appendChild(card);
+      });
+  }
+
+  function setupRanks() {
+    [...new Set(agents.map(a => a.rank))].forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r;
+      opt.textContent = r;
+      rankFilter.appendChild(opt);
+    });
+  }
+
+  function renderDivisions() {
+    const grid = document.getElementById("divisionGrid");
+    divisions.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "division-card";
+      card.innerHTML = `
+        <img src="${d.image}" alt="${d.name}">
+        <div class="division-info">
+          <h3>${d.name}</h3>
+          <div>${d.description}</div>
+        </div>
+        <div class="join-btn">
+          <a href="${d.discord}" target="_blank">Join Now</a>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll("nav button").forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("divisions").style.display = btn.dataset.tab === "divisions" ? "block" : "none";
+      document.getElementById("agents").style.display = btn.dataset.tab === "agents" ? "block" : "none";
+    };
+  });
+
+  function toggleTheme() {
+    document.body.classList.toggle("light");
+  }
+
+  searchInput.oninput = renderAgents;
+  rankFilter.onchange = renderAgents;
+
+  setupRanks();
+  renderAgents();
+  renderDivisions();
 </script>
+
 </body>
 </html>
