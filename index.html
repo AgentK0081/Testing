@@ -142,21 +142,7 @@
     }
 
     /* ================== AGENTS ================== */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .controls input, .controls select {
-      background: var(--card);
-      border: 1px solid #333;
-      color: var(--text);
-      padding: 10px;
-      border-radius: 8px;
-    }
-
+    
     .agents-panel {
   width: 100%;
   background: rgba(0,0,0,0.55);
@@ -317,8 +303,6 @@ function renderAgents() {
     agentList.appendChild(row);
   });
 }
-
-
 
   function setupRanks() {
     [...new Set(agents.map(a => a.rank))].forEach(r => {
